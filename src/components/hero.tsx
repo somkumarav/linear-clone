@@ -1,13 +1,33 @@
+import classNames from "classnames";
 import { ReactNode } from "react";
 
-const HeroTitle = ({ children }: { children: ReactNode }) => {
+type HeroTitlesProps = {
+  children: ReactNode;
+  className?: string;
+};
+
+const HeroTitle = ({ children, className }: HeroTitlesProps) => {
   return (
-    <h1 className='text-gradient text-6xl md:text-8xl my-6'>{children}</h1>
+    <h1
+      className={classNames(
+        "text-gradient text-6xl md:text-8xl my-6",
+        className
+      )}
+    >
+      {children}
+    </h1>
   );
 };
-const HeroSubtitle = ({ children }: { children: ReactNode }) => {
+const HeroSubtitle = ({ children, className }: HeroTitlesProps) => {
   return (
-    <p className='text-primary-text text-lg md:text-xl mb-12'>{children}</p>
+    <p
+      className={classNames(
+        "text-primary-text text-lg md:text-xl mb-12",
+        className
+      )}
+    >
+      {children}
+    </p>
   );
 };
 

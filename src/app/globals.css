@@ -79,12 +79,27 @@
       rgba(120, 119, 198, 0.15),
       transparent
     );
+  --background-image-hero-glow: conic-gradient(
+    from 230.29deg at 51.63% 52.16%,
+    rgb(36, 0, 255) 0deg,
+    rgb(0, 135, 255) 67.5deg,
+    rgb(108, 39, 157) 198.75deg,
+    rgb(24, 38, 163) 251.25deg,
+    rgb(54, 103, 196) 301.88deg,
+    rgb(105, 30, 255) 360deg
+  );
 
   --text-shadow-*: initial;
   --text-shadow-primary: 0px 3px 12px rgba(0, 0, 0, 0.56);
 
   --shadow-*: initial;
-  --shadow-primary: 0px 1px 40px rgba(80, 63, 205, 0.5);
+  --shadow-primary: 0px 1px 40px rgb(80 63 205 / 50%);
+
+  --animate-*: initial;
+  --animate-fade-in: fade-in 1000ms var(--animation-delay, 0ms) ease forwards;
+  --animate-image-rotate: image-rotate 1400ms ease forwards;
+  --animate-image-glow: image-glow 4100ms 600ms ease-out forwards;
+  --animate-sketch-lines: sketch-lines 1200ms ease-out forwards;
 }
 
 @layer base {
@@ -102,4 +117,60 @@
   );
   background-clip: text;
   color: transparent;
+}
+
+/**
+ * ANIMATIONS
+ */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes image-rotate {
+  0% {
+    transform: rotateX(25deg);
+  }
+  25% {
+    transform: rotateX(25deg) scale(0.9);
+  }
+  60%,
+  to {
+    transform: none;
+  }
+}
+
+@keyframes image-glow {
+  0% {
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.74, 0.25, 0.76, 1);
+  }
+  10% {
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.12, 0.01, 0.08, 0.99);
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes sketch-lines {
+  0% {
+    stroke-dashoffset: 1;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  99% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    visibility: hidden;
+  }
 }
