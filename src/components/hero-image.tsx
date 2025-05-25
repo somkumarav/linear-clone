@@ -1,11 +1,49 @@
 "use client";
 import classNames from "classnames";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
+type Line = {
+  id: string;
+  direction: "to bottom" | "to right";
+  duration: number;
+  size: number;
+};
+
+const generateRandomNumber = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 export const HeroImage = () => {
+  const [lines, setLines] = useState<Line[]>([]);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { ref, inView } = useInView({ threshold: 0.5, triggerOnce: true });
 
-  console.log(inView);
+  useEffect(() => {
+    const renderLine = (timeout: number) => {
+      timeoutRef.current = setTimeout(() => {
+        setLines((prevLines) => [
+          ...prevLines,
+          {
+            id: `line-${Date.now()}`,
+            direction: Math.random() > 0.5 ? "to bottom" : "to right",
+            duration: generateRandomNumber(2000, 3500),
+            size: generateRandomNumber(10, 30),
+          },
+        ]);
+        renderLine(generateRandomNumber(800, 2500));
+      }, timeout);
+    };
+
+    renderLine(generateRandomNumber(800, 1300));
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [setLines]);
+
+  const removeLine = (id: string) => {
+    setLines((prevLines) => prevLines.filter((line) => line.id !== id));
+  };
 
   return (
     <div ref={ref} className='perspective-[2000px] mt-[12.8rem]'>
@@ -17,6 +55,30 @@ export const HeroImage = () => {
           inView && "before:animate-image-glow"
         )}
       >
+        <div className='absolute top-0 left-0 z-20 w-full h-full'>
+          {lines.map((line, index) => {
+            return (
+              <span
+                onAnimationEnd={() => removeLine(line.id)}
+                key={index}
+                style={
+                  {
+                    "--direction": line.direction,
+                    "--size": line.size,
+                    "--animation-duration": `${line.duration}ms`,
+                  } as CSSProperties
+                }
+                className={classNames(
+                  "bg-glow-lines block absolute top-0 ",
+                  line.direction === "to right" &&
+                    `w-[calc(var(--size)*1rem)] h-[1px] left-0 animate-glow-line-horizontal`,
+                  line.direction === "to bottom" &&
+                    `h-[calc(var(--size)*1rem)] w-[1px] right-0 animate-glow-line-vertical`
+                )}
+              />
+            );
+          })}
+        </div>
         <svg
           className={classNames(
             "absolute left-0 top-0 h-full w-full [&_path]:stroke-white [&_path]:[stroke-opacity:0.2] [&_path]:[stroke-dasharray:1] [&_path]:[stroke-dashoffset:1]",

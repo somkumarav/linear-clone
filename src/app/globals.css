@@ -88,6 +88,17 @@
     rgb(54, 103, 196) 301.88deg,
     rgb(105, 30, 255) 360deg
   );
+  --background-image-glow-lines: linear-gradient(
+    var(--direction),
+    #9d9bf2 0.43%,
+    #7877c6 14.11%,
+    rgba(120, 119, 198, 0) 62.95%
+  );
+  --background-image-radial-faded: radial-gradient(
+    circle at bottom center,
+    var(--color),
+    transparent 70%
+  );
 
   --text-shadow-*: initial;
   --text-shadow-primary: 0px 3px 12px rgba(0, 0, 0, 0.56);
@@ -100,6 +111,10 @@
   --animate-image-rotate: image-rotate 1400ms ease forwards;
   --animate-image-glow: image-glow 4100ms 600ms ease-out forwards;
   --animate-sketch-lines: sketch-lines 1200ms ease-out forwards;
+  --animate-glow-line-horizontal: glow-line-horizontal var(--animation-duration)
+    ease-in forwards;
+  --animate-glow-line-vertical: glow-line-vertical var(--animation-duration)
+    ease-in forwards;
 }
 
 @layer base {
@@ -117,6 +132,10 @@
   );
   background-clip: text;
   color: transparent;
+}
+
+@utility mask-radial-faded {
+  mask-image: radial-gradient(circle at center center, black, transparent 80%);
 }
 
 /**
@@ -172,5 +191,34 @@
   }
   100% {
     visibility: hidden;
+  }
+}
+
+@keyframes glow-line-horizontal {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  5% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(min(60vw, 45rem));
+  }
+}
+@keyframes glow-line-vertical {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  5% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(min(21vw, 45rem));
   }
 }
